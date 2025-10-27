@@ -31,16 +31,25 @@ def create_app():
         validate_directories(logger, template_dir, static_dir)
 
         app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
+
+        # Register routes
+        @app.route('/')
+        def index():
+            try:
+                return render_template('dashboard.html')
+            except Exception as e:
+                logger.error(f"Error rendering 'dashboard.html': {e}")
+                return "An error occurred while loading the dashboard.", 500
+
+        @app.route('/campaign')
+        def campaign():
+            try:
+                return render_template('campaign.html')
+            except Exception as e:
+                logger.error(f"Error rendering 'campaign.html': {e}")
+                return "An error occurred while loading the campaign page.", 500
+
+        return app
     except Exception as e:
         logger.error(f"Error initializing Flask app: {e}")
         raise
-
-    @app.route('/')
-    def index():
-        return render_template('dashboard.html')
-
-    @app.route('/campaign')
-    def campaign():
-        return render_template('campaign.html')
-
-    return app

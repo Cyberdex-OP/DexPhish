@@ -4,9 +4,26 @@ from .cloner import Cloner
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from dotenv import load_dotenv
 
-load_dotenv()
+def _load_dotenv(path='.env'):
+    try:
+        if not os.path.exists(path):
+            return
+        with open(path, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#') or '=' not in line:
+                    continue
+                k, v = line.split('=', 1)
+                k = k.strip()
+                v = v.strip().strip('\'"')
+                if k not in os.environ:
+                    os.environ[k] = v
+    except Exception:
+        # ignore dotenv parsing errors
+        pass
+
+_load_dotenv()
 log = logging.getLogger("campaign")
 
 class CampaignManager:
