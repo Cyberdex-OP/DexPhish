@@ -53,3 +53,10 @@ def create_app():
     except Exception as e:
         logger.error(f"Error initializing Flask app: {e}")
         raise
+
+# Ensure Flask is installed
+try:
+    import flask
+except ImportError:
+    import pip
+    pip.main(['install', 'flask'])

@@ -1,3 +1,4 @@
+pip
 flask
 beautifulsoup4
 selenium
